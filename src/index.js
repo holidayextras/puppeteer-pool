@@ -1,7 +1,8 @@
 import puppeteer from 'puppeteer'
 import genericPool from 'generic-pool'
 import initDebug from 'debug'
-const debug = initDebug('puppeteer-pool')
+
+initDebug('puppeteer-pool')
 
 const initPuppeteerPool = ({
   max = 10,
@@ -25,6 +26,7 @@ const initPuppeteerPool = ({
     destroy: (instance) => {
       instance.close()
     },
+    // eslint-disable-next-line
     validate: (instance) => {
       return validator(instance)
         .then(valid => Promise.resolve(valid && (maxUses <= 0 || instance.useCount < maxUses)))

@@ -15,9 +15,9 @@ test('create pool', async () => {
 
 test('create pool', async (t) => {
   const instance = await phantomPool.acquire()
-  const page = await instance.createPage()
-  const viewportSize = await page.property('viewportSize')
-  t.deepEqual(viewportSize, { height: 300, width: 400 })
+  const page = await instance.newPage()
+  const viewportSize = await page.viewport()
+  t.deepEqual(viewportSize, { width: 800, height: 600 })
   await phantomPool.release(instance)
 })
 
@@ -58,10 +58,10 @@ test('use', async (t) => {
   t.equal(inUse(phantomPool), 0)
   const result = await phantomPool.use(async (instance) => {
     t.equal(inUse(phantomPool), 1)
-    const page = await instance.createPage()
-    return page.setting('javascriptEnabled')
+    const page = await instance.newPage()
+    return page.viewport()
   })
-  t.equal(result, true)
+  t.deepEqual(result, { width: 800, height: 600 })
   t.equal(inUse(phantomPool), 0)
 })
 
